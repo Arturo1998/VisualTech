@@ -17,6 +17,18 @@
 
 <script setup>
 import { useRouter } from "vue-router";
+import { ref } from "vue";
+import {
+  actualizaDoc,
+  borraDoc,
+  dameDoc,
+  dameDocsFiltro,
+  dameDocs,
+  onCambioDoc,
+  onDameDoc,
+} from "@/API/firebase";
+
+const valor = ref("");
 
 const route = useRouter();
 const login = () => {

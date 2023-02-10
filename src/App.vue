@@ -1,7 +1,6 @@
 <script setup>
-import { RouterLink, RouterView, useRouter } from "vue-router";
+import { RouterLink, RouterView } from "vue-router";
 import MiCabecera from "./components/MiCabecera.vue";
-import MiLogin from "./views/MiLogin.vue";
 </script>
 
 <template>
