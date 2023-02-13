@@ -5,7 +5,6 @@ import MiCabecera from "./components/MiCabecera.vue";
 
 <template>
   <MiCabecera titulo="VisualTech" />
-  <router-link to="/"></router-link>
   <router-view />
 </template>
 
