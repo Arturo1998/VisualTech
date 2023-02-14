@@ -6,18 +6,18 @@
       <h1 class="p-2 font-black">INICIA SESIÓN</h1>
       <h2>Nombre</h2>
       <input
-        v-model="nombre"
+        v-model="nombreIn"
         class="border-2 border-emerald-500 text-black"
         type="text"
       />
       <h2>Contraseña</h2>
       <input
-        v-model="paswd"
+        v-model="paswdIn"
         class="border-2 border-emerald-500 text-black"
         type="password"
       />
       <button
-        @click="singIn('USUARIOS', 'nombre', nombre)"
+        @click="singIn('USUARIOS', 'nombre', nombreIn)"
         class="bg-cyan-300 rounded-xl p-1 mt-4"
       >
         Log In
@@ -31,20 +31,23 @@ import { dameDocs, dameDocsFiltro } from "@/API/firebase";
 import { useRouter } from "vue-router";
 import { ref } from "vue";
 
-let nombre = ref("");
-let paswd = ref("");
-const route = useRouter();
+let nombreIn = ref("");
+let paswdIn = ref("");
+const router = useRouter();
 
 const singIn = async (ref, nombre, valorNombre) => {
   const usuarios = await dameDocsFiltro(ref, nombre, valorNombre);
-  usuarios.docs.map((el) =>
-    el.data().paswd == paswd.value
-      ? route.push({
-          name: "MiPrincipal",
-          params: { nombre: el.data().nombre },
+  usuarios.docs.map((el) => {
+    let { nombre, paswd } = el.data();
+    paswd == paswdIn.value
+      ? router.push({
+          name: "MiPrin",
+          params: {
+            saludo: "hola",
+          },
         })
-      : alert("Usuario o contraseña incorrecto")
-  );
+      : alert("Usuario o contraseña incorrecto");
+  });
 };
 </script>
 

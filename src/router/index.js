@@ -9,13 +9,12 @@ const router = createRouter({
       path: "/",
       name: "MiLogin",
       component: MiLogin,
-      props: true,
     },
     {
       path: "/principal",
       name: "MiPrincipal",
       component: MiPrincipal,
-      props: true,
+      params: true,
     },
   ],
 });
