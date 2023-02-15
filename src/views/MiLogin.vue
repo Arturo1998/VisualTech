@@ -41,10 +41,9 @@ const singIn = async (ref, nombre, valorNombre) => {
     let { nombre, paswd } = el.data();
     paswd == paswdIn.value
       ? router.push({
-          name: "MiPrin",
-          params: {
-            saludo: "hola",
-          },
+          name: "Principal",
+          params: { name: nombre },
+          //query: { obj: { el } },
         })
       : alert("Usuario o contraseña incorrecto");
   });

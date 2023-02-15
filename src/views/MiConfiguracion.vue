@@ -2,21 +2,14 @@
   <div
     class="h-screen min-w-min flex flex-col bg-gradient-to-b from-cyan-700 via-sky-800 to-sky-500 text-center text-2xl text-white pt-6 items-center"
   >
-    <h1 class="p-2 font-black">Bienvenido {{ nombreUsu }}</h1>
-
-    <div class="mt-5">
-      <NavBar :links="['Configuracion', 'Dashboard']" />
-    </div>
+    <h1 class="p-2 font-black">Conf</h1>
   </div>
 </template>
 
 <script setup>
-import { useRoute, RouterLink, RouterView } from "vue-router";
-import NavBar from "../components/NavBar.vue";
-
+import { useRoute } from "vue-router";
 import { ref } from "vue";
 const route = useRoute();
-let nombreUsu = route.params.name;
 
 //console.log(route.query.obj.value);
 </script>
