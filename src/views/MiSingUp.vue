@@ -3,7 +3,7 @@
     class="h-screen min-w-min flex flex-col bg-gradient-to-b from-cyan-700 via-sky-800 to-sky-500 text-center text-2xl text-white pt-6 items-center"
   >
     <div class="flex flex-col w-56">
-      <h1 class="p-2 font-black">INICIA SESIÓN</h1>
+      <h1 class="p-2 font-black">CREA UNA CUENTA</h1>
       <h2>Nombre</h2>
       <input
         v-model="nombreIn"
@@ -16,17 +16,16 @@
         class="border-2 border-emerald-500 text-black"
         type="password"
       />
-      <button @click="logIn()" class="bg-cyan-300 rounded-xl p-1 mt-4">
-        Log In
+      <button @click="registro()" class="bg-cyan-300 rounded-xl p-1 mt-4">
+        Sing In
       </button>
-
-      <RouterLink to="/Registro">¿No tienes cuenta?</RouterLink>
+      <RouterLink to="/">¿Ya tienes cuenta?</RouterLink>
     </div>
   </div>
 </template>
 
 <script setup>
-import { onLogIn } from "@/API/firebase";
+import { registraUsuario } from "@/API/firebase";
 import { useRouter } from "vue-router";
 import { ref } from "vue";
 
@@ -34,16 +33,14 @@ let nombreIn = ref("");
 let paswdIn = ref("");
 const router = useRouter();
 
-const logIn = () => {
-  onLogIn("USUARIOS", nombreIn.value, (docs) => {
-    docs.forEach((doc) => {
-      doc.data().paswd == paswdIn.value
-        ? router.push({
-            name: "Principal",
-            params: { name: doc.data().nombre },
-          })
-        : alert("Contraseña incorrecta");
-    });
+const registro = () => {
+  registraUsuario("USUARIOS", {
+    nombre: nombreIn.value,
+    paswd: paswdIn.value,
+  });
+  router.push({
+    name: "Principal",
+    params: { name: nombreIn.value },
   });
 };
 </script>

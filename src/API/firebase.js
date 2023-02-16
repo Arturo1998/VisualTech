@@ -5,6 +5,8 @@ import {
   getDocs,
   where,
   query,
+  onSnapshot,
+  addDoc,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -29,3 +31,15 @@ export const dameDocs = (ref) => getDocs(collection(db, ref));
 
 export const dameDocsFiltro = (ref, nombre, valorNombre) =>
   getDocs(query(collection(db, ref), where(nombre, "==", valorNombre)));
+
+export const onLogIn = (ref, valorNombre, callback) =>
+  onSnapshot(
+    query(collection(db, ref), where("nombre", "==", valorNombre)),
+    callback
+  );
+
+export const registraUsuario = (ref, usuario) =>
+  addDoc(collection(db, ref), usuario);
+
+export const onDameSalas = (ref, callback) =>
+  onSnapshot(collection(db, ref), callback);

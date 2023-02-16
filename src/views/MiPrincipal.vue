@@ -4,21 +4,37 @@
   >
     <h1 class="p-2 font-black">Bienvenido {{ nombreUsu }}</h1>
 
-    <div class="mt-5">
-      <NavBar :links="['Configuracion', 'Dashboard']" />
+    <div class="w-3/4">
+      <ul v-for="(sala, index) in salas" :key="index">
+        <li class="bg-gray-400 mb-3 rounded-xl">{{ sala.espacio }}</li>
+      </ul>
+      <button class="w-2/4 bg-gray-400 rounded-xl"> + </button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { useRoute, RouterLink, RouterView } from "vue-router";
-import NavBar from "../components/NavBar.vue";
-
+import { useRoute } from "vue-router";
+import { onDameSalas } from "@/API/firebase";
 import { ref } from "vue";
+import { onMounted } from "vue";
+
+onMounted(() => {
+  dameSalas();
+});
+
+let salas = ref([]);
+
+const dameSalas = async () => {
+  await onDameSalas("SALAS", (docs) => {
+    docs.forEach((doc) => {
+      salas.value.push(doc.data());
+    });
+  });
+};
+
 const route = useRoute();
 let nombreUsu = route.params.name;
-
-//console.log(route.query.obj.value);
 </script>
 
 <style scoped></style>
