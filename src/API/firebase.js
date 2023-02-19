@@ -41,5 +41,10 @@ export const onLogIn = (ref, valorNombre, callback) =>
 export const registraUsuario = (ref, usuario) =>
   addDoc(collection(db, ref), usuario);
 
+export const anadeSala = (ref, sala) => addDoc(collection(db, ref), sala);
+
+export const onDameDispositivos = (ref, callback) =>
+  onSnapshot(collection(db, ref), callback);
+
 export const onDameSalas = (ref, callback) =>
   onSnapshot(collection(db, ref), callback);
