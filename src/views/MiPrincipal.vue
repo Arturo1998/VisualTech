@@ -1,16 +1,33 @@
 <template>
-  <div class="contenedorPrincipal">
-    <div v-if="modalOn == true">
+  <Teleport to="#modalSala">
+    <div v-if="modalOn" class="modal-bg">
       <div class="contenedorModal">
-        <ModalAnadir @cerrar="cerrarModal()" />
+        <div class="barra">
+          <h1 class="">Introduce el nombre de la sala</h1>
+          <button @click="cerrarModal()">X</button>
+        </div>
+        <div class="contenido">
+          <h1>Nobre Sala</h1>
+          <input type="text" v-model="nombreSala" />
+        </div>
+        <button @click="registraSala()">Agregar</button>
       </div>
     </div>
+  </Teleport>
+  <div class="contenedorPrincipal">
     <button @click="logOut()" class="text-sm ml-96 h-auto w-auto bg-slate-300">
       Log Out
     </button>
     <h1 class="p-2 font-black mb-3">
       Bienvenido a su dashboard, {{ nombreUsu }}:
     </h1>
+
+    <button
+      class="w-1/4 bg-gray-400 rounded-xl hover:bg-slate-500 mb-5"
+      @click="modalOn = true"
+    >
+      Crea una sala
+    </button>
 
     <div class="contenedorLista">
       <ul v-for="(sala, index) in salas" :key="index">
@@ -37,21 +54,14 @@
         </div>
       </ul>
     </div>
-    <button
-      class="w-1/4 bg-gray-400 rounded-xl hover:bg-slate-500"
-      @click="modalOn = true"
-    >
-      Crea una sala
-    </button>
   </div>
 </template>
 
 <script setup>
 import { useRoute, useRouter } from "vue-router";
 import { onDameSalas, anadeSala, onDameDispositivos } from "@/API/firebase";
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref } from "vue";
 import MiItem from "../components/MiItem.vue";
-import ModalAnadir from "../components/ModalAnadir.vue";
 
 let salas = ref([]);
 let dispositivos = ref([]);
@@ -60,7 +70,7 @@ const modalOn = ref(false);
 const route = useRoute();
 const router = useRouter();
 let nombreUsu = route.params.name;
-const emit = defineEmits(["cerrar"]);
+let nombreSala = ref("");
 
 onMounted(() => {
   dameSalas();
@@ -94,7 +104,7 @@ const dameSalas = () => {
 
 const registraSala = () => {
   salas.value = [];
-  anadeSala("SALAS", { espacio: "1", usuario: nombreUsu });
+  anadeSala("SALAS", { espacio: nombreSala.value, usuario: nombreUsu });
 };
 
 const dameDispositivos = () => {
@@ -138,5 +148,68 @@ const logOut = () => {
   );
   text-align: center;
   color: azure;
+}
+
+.modal-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background-color: rgba(0, 0, 0, 0.5);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contenedorModal {
+  background-color: rgb(18, 121, 168);
+  color: white;
+  width: 24em;
+}
+
+.contenedorModal input {
+  color: black;
+}
+
+.contenedorModal button {
+  width: 25em;
+  margin-top: 10px;
+  background-color: darkgrey;
+}
+
+.contenedorModal button:hover {
+  background-color: rgb(139, 139, 139);
+}
+
+.barra {
+  text-align: end;
+  margin-right: 10px;
+  display: flex;
+}
+
+.barra > button {
+  background-color: red;
+  border-radius: 50%;
+  width: 1.5em;
+  margin-top: 2px;
+  margin-left: 4em;
+}
+
+.barra h1 {
+  font-size: 20px;
+  margin-left: 5px;
+}
+
+.contenido {
+  margin-top: 10px;
+  display: flex;
+}
+
+.contenido h1 {
+  margin-right: 10px;
+  margin-left: 10px;
 }
 </style>
