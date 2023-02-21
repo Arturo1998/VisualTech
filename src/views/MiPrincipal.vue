@@ -1,4 +1,45 @@
 <template>
+  <div class="contenedorPrincipal">
+    <button @click="logOut()" class="text-sm ml-96 h-auto w-auto bg-slate-300">
+      Log Out
+    </button>
+    <h1 class="p-2 font-black mb-3">
+      Bienvenido a su dashboard, {{ nombreUsu }}:
+    </h1>
+
+    <button
+      class="w-1/4 bg-gray-400 rounded-xl hover:bg-slate-500 mb-5"
+      @click="modalOn = true"
+    >
+      Crea una sala
+    </button>
+    <div class="contenedorLista">
+      <ul v-for="(sala, index) in salas" :key="index">
+        <div class="border-2 mb-3">
+          <li class="bg-gray-400 flex">
+            <h3 class="text-base text-left ml-5">
+              {{ sala.espacio }}
+            </h3>
+            <button class="text-sm bg-red-500 rounded-xl w-6 h-6 mt-0.5 mb-0.5">
+              X
+            </button>
+          </li>
+
+          <ul
+            v-for="(dispositivo, index) in dispositivos.filter(
+              (x) => x.sala === sala.espacio
+            )"
+            :key="index"
+          >
+            <button>Xas</button>
+            <li id="item">
+              <MiItem :item="dispositivo" :sala="sala" :usuario="nombreUsu" />
+            </li>
+          </ul>
+        </div>
+      </ul>
+    </div>
+  </div>
   <Teleport to="#modalSala">
     <div v-if="modalOn" class="modal-bg">
       <div class="contenedorModal">
@@ -14,97 +55,32 @@
       </div>
     </div>
   </Teleport>
-  <Teleport to="#modalSensor">
-    <div v-if="modalSensorOn" class="modal-bg">
-      <div class="contenedorModal">
-        <div class="barra">
-          <h1 class="text-base">Introduce los datos dispositivo</h1>
-          <button @click="cerrarModal()">X</button>
-        </div>
-        <div class="contenido">
-          <h1>Nobre</h1>
-          <input type="text" v-model="nombreSensor" />
-          <h1>Tipo</h1>
-          <select
-            name="tipo"
-            id="tipo"
-            class="bg-slate-500"
-            v-model="tipoSensor"
-          >
-            <option value="Sensor">Sensor</option>
-            <option value="Sensor">Ejecutor</option>
-          </select>
-        </div>
-        <button @click="registraDispositivo()">Agregar</button>
-      </div>
-    </div>
-  </Teleport>
-  <div class="contenedorPrincipal">
-    <button @click="logOut()" class="text-sm ml-96 h-auto w-auto bg-slate-300">
-      Log Out
-    </button>
-    <h1 class="p-2 font-black mb-3">
-      Bienvenido a su dashboard, {{ nombreUsu }}:
-    </h1>
-
-    <button
-      class="w-1/4 bg-gray-400 rounded-xl hover:bg-slate-500 mb-5"
-      @click="modalOn = true"
-    >
-      Crea una sala
-    </button>
-
-    <div class="contenedorLista">
-      <ul v-for="(sala, index) in salas" :key="index">
-        <div class="border-2 mb-3">
-          <li class="bg-gray-400 flex">
-            <h3 class="text-base text-left ml-5">
-              {{ sala.espacio }}
-            </h3>
-            <button
-              class="ml-80 text-sm bg-red-500 rounded-xl w-6 h-6 mt-0.5 mb-0.5"
-            >
-              X
-            </button>
-          </li>
-
-          <ul
-            v-for="(dispositivo, index) in dispositivos.filter(
-              (x) => x.sala === sala.espacio
-            )"
-            :key="index"
-          >
-            <li>
-              <MiItem
-                :item="dispositivo"
-                :sala="sala"
-                @abrirModal="abrirModalDisp()"
-              />
-            </li>
-          </ul>
-        </div>
-      </ul>
-    </div>
-  </div>
 </template>
 
 <script setup>
 import { useRoute, useRouter } from "vue-router";
-import { onDameSalas, anadeSala, onDameDispositivos } from "@/API/firebase";
+import {
+  onDameSalas,
+  anadeSala,
+  onDameDispositivos,
+  anadeDisp,
+} from "@/API/firebase";
 import { onMounted, ref } from "vue";
 import MiItem from "../components/MiItem.vue";
 
 let salas = ref([]);
 let dispositivos = ref([]);
 const modalOn = ref(false);
-const modalSensorOn = ref(false);
+const haySala = ref(false);
 
 const route = useRoute();
 const router = useRouter();
-let nombreUsu = route.params.name;
+const nombreUsu = route.params.name;
 let nombreSala = ref("");
-let nombreSensor = ref("");
-let tipoSensor = ref("");
+
+function log(obj) {
+  console.log(obj);
+}
 
 onMounted(() => {
   dameSalas();
@@ -141,17 +117,6 @@ const registraSala = () => {
   anadeSala("SALAS", { espacio: nombreSala.value, usuario: nombreUsu });
 };
 
-const registraDispositivo = () => {
-  dispositivos.value = [];
-  anadeSala("DISPOSITIVOS", {
-    nombre: nombreSensor.value,
-    usuario: nombreUsu,
-    tipo: tipoSensor,
-    sala: nombreSala.value,
-    temperatura: 0,
-  });
-};
-
 const dameDispositivos = () => {
   onDameDispositivos("DISPOSITIVOS", (docs) => {
     docs.forEach((doc) => {
@@ -163,11 +128,6 @@ const dameDispositivos = () => {
 
 const cerrarModal = () => {
   modalOn.value = false;
-  modalSensorOn.value = false;
-};
-
-const abrirModalDisp = () => {
-  modalSensorOn.value = true;
 };
 
 const logOut = () => {
@@ -261,5 +221,14 @@ const logOut = () => {
 .contenido h1 {
   margin-right: 10px;
   margin-left: 10px;
+}
+
+.anadirDispositivo {
+  width: 100%;
+  background-color: darkgrey;
+}
+
+.anadirDispositivo:hover {
+  background-color: rgb(139, 139, 139);
 }
 </style>
