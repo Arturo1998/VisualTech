@@ -7,6 +7,8 @@ import {
   query,
   onSnapshot,
   addDoc,
+  doc,
+  updateDoc,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -50,3 +52,6 @@ export const onDameDispositivos = (ref, callback) =>
 
 export const onDameSalas = (ref, callback) =>
   onSnapshot(collection(db, ref), callback);
+
+export const actualizaValorDisp = (ref, id, objeto) =>
+  updateDoc(doc(db, ref, id), objeto);

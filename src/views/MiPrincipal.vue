@@ -15,7 +15,7 @@
     </button>
     <div class="contenedorLista">
       <ul v-for="(sala, index) in salas" :key="index">
-        <div class="border-2 mb-3">
+        <div class="estiloListaSala">
           <li class="bg-gray-400 flex">
             <h3 class="text-base text-left ml-5">
               {{ sala.espacio }}
@@ -24,16 +24,21 @@
               X
             </button>
           </li>
-
+          <button
+            class="rounded-md bg-slate-400 mt-2 hover:bg-slate-500"
+            @click="abrirModalDisp(sala.espacio)"
+          >
+            Añadir dispositivo
+          </button>
           <ul
             v-for="(dispositivo, index) in dispositivos.filter(
               (x) => x.sala === sala.espacio
             )"
             :key="index"
           >
-            <button>Xas</button>
             <li id="item">
-              <MiItem :item="dispositivo" :sala="sala" :usuario="nombreUsu" />
+              <MiItem :item="dispositivo" />
+              <button @click="log(dispositivo)">id</button>
             </li>
           </ul>
         </div>
@@ -55,6 +60,31 @@
       </div>
     </div>
   </Teleport>
+  <Teleport to="#modalSensor">
+    <div v-if="modalSensorOn" class="modal-bg">
+      <div class="contenedorModal">
+        <div class="barra">
+          <h1 class="text-base">Introduce los datos dispositivo</h1>
+          <button @click="cerrarModal()">X</button>
+        </div>
+        <div class="contenido">
+          <h1>Nobre</h1>
+          <input type="text" v-model="nombreSensor" />
+          <h1>Tipo</h1>
+          <select
+            name="tipo"
+            id="tipo"
+            class="bg-slate-500"
+            v-model="tipoSensor"
+          >
+            <option value="Sensor">Sensor</option>
+            <option value="Ejecutor">Ejecutor</option>
+          </select>
+        </div>
+        <button @click="registraDispositivo()">aceptar</button>
+      </div>
+    </div>
+  </Teleport>
 </template>
 
 <script setup>
@@ -71,43 +101,30 @@ import MiItem from "../components/MiItem.vue";
 let salas = ref([]);
 let dispositivos = ref([]);
 const modalOn = ref(false);
-const haySala = ref(false);
+
+const nombreSensor = ref("");
+const tipoSensor = ref("");
 
 const route = useRoute();
 const router = useRouter();
 const nombreUsu = route.params.name;
-let nombreSala = ref("");
+const nombreSala = ref("");
+const modalSensorOn = ref(false);
+const salaActual = ref("");
 
 function log(obj) {
-  console.log(obj);
+  console.log(obj.id);
 }
 
 onMounted(() => {
   dameSalas();
   dameDispositivos();
 });
-/*
-beforeDestroy(() => {
- document.body.classList.remove('contenedorModal')
-  from-cyan-700 via-sky-800 to-sky-500 text-center text-2xl text-white
-
-
-})
-
-watch: {
-  watch(modalOn, (newX) => {
-    const contenedor = document.getElementsByClassName("contenedorPrincipal");
-    contenedor.style.position = "fixed";
-  });
-}
-
-
-*/
 
 const dameSalas = () => {
   onDameSalas("SALAS", (docs) => {
     docs.forEach((doc) => {
-      salas.value.push({ ...doc.data() });
+      salas.value.push({ id: doc.id, ...doc.data() });
     });
   });
 };
@@ -120,14 +137,41 @@ const registraSala = () => {
 const dameDispositivos = () => {
   onDameDispositivos("DISPOSITIVOS", (docs) => {
     docs.forEach((doc) => {
-      dispositivos.value.push({ ...doc.data() });
-      console.log(doc.data());
+      dispositivos.value.push({ id: doc.id, ...doc.data() });
     });
+    console.log(dispositivos.value)
   });
+};
+
+function abrirModalDisp(sala) {
+  modalSensorOn.value = true;
+  salaActual.value = sala;
+}
+
+const registraDispositivo = async () => {
+  dispositivos.value = [];
+  if (tipoSensor.value == "Sensor") {
+    await anadeDisp("DISPOSITIVOS", {
+      nombre: nombreSensor.value,
+      usuario: nombreUsu,
+      tipo: tipoSensor.value,
+      sala: salaActual.value,
+      temperatura: "-",
+    });
+  } else {
+    await anadeDisp("DISPOSITIVOS", {
+      nombre: nombreSensor.value,
+      usuario: nombreUsu,
+      tipo: tipoSensor.value,
+      sala: salaActual.value,
+      estado: "on",
+    });
+  }
 };
 
 const cerrarModal = () => {
   modalOn.value = false;
+  modalSensorOn.value = false;
 };
 
 const logOut = () => {
@@ -139,8 +183,6 @@ const logOut = () => {
 .contenedorLista {
   margin: 0 auto;
   width: 50%;
-
-  grid-template-columns: repeat(2, 1fr);
 }
 
 .contenedorModal {
@@ -177,7 +219,7 @@ const logOut = () => {
 .contenedorModal {
   background-color: rgb(18, 121, 168);
   color: white;
-  width: 25em;
+  width: 30em;
 }
 
 .contenedorModal input {
@@ -222,13 +264,9 @@ const logOut = () => {
   margin-right: 10px;
   margin-left: 10px;
 }
-
-.anadirDispositivo {
-  width: 100%;
-  background-color: darkgrey;
-}
-
-.anadirDispositivo:hover {
-  background-color: rgb(139, 139, 139);
+.estiloListaSala {
+  border: solid 3px rgb(49, 178, 201);
+  padding: 0px 10px 0px 10px;
+  margin-bottom: 5px;
 }
 </style>
