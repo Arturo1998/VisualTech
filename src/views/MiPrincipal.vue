@@ -20,7 +20,10 @@
             <h3 class="text-base text-left ml-5">
               {{ sala.espacio }}
             </h3>
-            <button class="text-sm bg-red-500 rounded-xl w-6 h-6 mt-0.5 mb-0.5">
+            <button
+              @click="borraSala(sala)"
+              class="text-sm bg-red-500 rounded-xl w-6 h-6 mt-0.5 mb-0.5"
+            >
               X
             </button>
           </li>
@@ -38,7 +41,6 @@
           >
             <li id="item">
               <MiItem :item="dispositivo" />
-              <button @click="log(dispositivo)">id</button>
             </li>
           </ul>
         </div>
@@ -94,12 +96,15 @@ import {
   anadeSala,
   onDameDispositivos,
   anadeDisp,
+  borraDisp,
 } from "@/API/firebase";
 import { onMounted, ref } from "vue";
 import MiItem from "../components/MiItem.vue";
 
 let salas = ref([]);
+
 let dispositivos = ref([]);
+
 const modalOn = ref(false);
 
 const nombreSensor = ref("");
@@ -112,10 +117,6 @@ const nombreSala = ref("");
 const modalSensorOn = ref(false);
 const salaActual = ref("");
 
-function log(obj) {
-  console.log(obj.id);
-}
-
 onMounted(() => {
   dameSalas();
   dameDispositivos();
@@ -123,6 +124,7 @@ onMounted(() => {
 
 const dameSalas = () => {
   onDameSalas("SALAS", (docs) => {
+    salas.value = [];
     docs.forEach((doc) => {
       salas.value.push({ id: doc.id, ...doc.data() });
     });
@@ -130,16 +132,15 @@ const dameSalas = () => {
 };
 
 const registraSala = () => {
-  salas.value = [];
   anadeSala("SALAS", { espacio: nombreSala.value, usuario: nombreUsu });
 };
 
 const dameDispositivos = () => {
   onDameDispositivos("DISPOSITIVOS", (docs) => {
+    dispositivos.value = [];
     docs.forEach((doc) => {
       dispositivos.value.push({ id: doc.id, ...doc.data() });
     });
-    console.log(dispositivos.value)
   });
 };
 
@@ -149,7 +150,6 @@ function abrirModalDisp(sala) {
 }
 
 const registraDispositivo = async () => {
-  dispositivos.value = [];
   if (tipoSensor.value == "Sensor") {
     await anadeDisp("DISPOSITIVOS", {
       nombre: nombreSensor.value,
@@ -176,6 +176,13 @@ const cerrarModal = () => {
 
 const logOut = () => {
   router.push({ path: "/" });
+};
+
+const borraSala = (sala) => {
+  borraDisp("SALAS", sala.id);
+  dispositivos.value.map((x) => {
+    x.sala == sala.espacio ? borraDisp("DISPOSITIVOS", x.id) : "";
+  });
 };
 </script>
 

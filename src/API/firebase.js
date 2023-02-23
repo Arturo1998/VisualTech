@@ -9,6 +9,7 @@ import {
   addDoc,
   doc,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -55,3 +56,5 @@ export const onDameSalas = (ref, callback) =>
 
 export const actualizaValorDisp = (ref, id, objeto) =>
   updateDoc(doc(db, ref, id), objeto);
+
+export const borraDisp = (ref, id) => deleteDoc(doc(db, ref, id));
