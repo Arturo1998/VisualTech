@@ -1,8 +1,8 @@
 <template>
   <div
-    class="h-screen min-w-min flex flex-col bg-gradient-to-b from-cyan-700 via-sky-800 to-sky-500 text-center text-2xl text-white pt-6 items-center"
+    class="h-screen min-w-min flex flex-col bg-gradient-to-b from-stone-900 via-stone-700 to-stone-600 text-center text-2xl text-white pt-6 items-center"
   >
-    <div class="flex flex-col w-56">
+    <form class="flex flex-col w-56" @submit.prevent="logIn()">
       <h1 class="p-2 font-black">INICIA SESIÓN</h1>
       <h2>Nombre</h2>
       <input
@@ -16,12 +16,12 @@
         class="border-2 border-emerald-500 text-black"
         type="password"
       />
-      <button @click="logIn()" class="bg-cyan-300 rounded-xl p-1 mt-4">
+      <button type="submit" class="bg-stone-500 rounded-xl p-1 mt-4">
         Log In
       </button>
 
       <RouterLink to="/Registro">¿No tienes cuenta?</RouterLink>
-    </div>
+    </form>
   </div>
 </template>
 
@@ -42,7 +42,7 @@ const logIn = () => {
             name: "Principal",
             params: { name: doc.data().nombre },
           })
-        : alert("Contraseña incorrecta");
+        : alert("Nombre o contraseña incorrectos");
     });
   });
 };
@@ -50,6 +50,6 @@ const logIn = () => {
 
 <style scoped>
 button:hover {
-  background-color: cadetblue;
+  background-color: rgb(116, 110, 84);
 }
 </style>

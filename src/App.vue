@@ -4,7 +4,7 @@ import MiCabecera from "./components/MiCabecera.vue";
 </script>
 
 <template>
-  <MiCabecera titulo="VisualTech" />
+  <MiCabecera titulo="GestiónTech" />
   <router-view />
 </template>
 

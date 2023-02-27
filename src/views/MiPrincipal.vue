@@ -2,38 +2,39 @@
   <div class="contenedorPrincipal">
     <button
       @click="logOut()"
-      class="text-sm h-auto w-auto hover:bg-red-400 bg-slate-500 p-2 rounded-md float-right mr-10"
+      class="mt-3 text-sm h-auto w-auto hover:bg-red-400 bg-stone-500 p-2 rounded-md float-right mr-10"
     >
       Log Out
     </button>
-    <h1 class="p-2 font-black mb-3">
-      Bienvenido a su dashboard, {{ nombreUsu }}:
+    <h1 class="p-2 font-black mb-3 pt-2.5">
+      Bienvenido a su dashboard, {{ nombreUsu }}
     </h1>
-
     <button
-      class="w-1/4 bg-slate-500 rounded-xl hover:bg-slate-600 mb-5"
+      class="w-1/4 bg-stone-800 rounded-xl hover:bg-stone-900 mb-5"
       @click="modalOn = true"
     >
       Crea una sala
     </button>
     <div class="contenedorLista">
       <ul
-        class="bg-blue-900 pt-2 pb-2 bg-opacity-30 rounded-md"
+        class="bg-stone-900 mb-3 pt-2 pb-2 bg-opacity-30 rounded-md"
         v-for="(sala, index) in salas"
         :key="index"
       >
         <div class="estiloListaSala">
-          <li class="flex bg-slate-500 pl-16 pr-5">
+          <li class="flex bg-stone-500 pl-16 pr-5 pb-1">
             <h3 class="text-base text-center mt-1 w-11/12">
               {{ sala.espacio }}
             </h3>
             <button
+              title="Añadir dispositivo"
               class="bg- mt-1 mr-2 bg-cyan-800 hover:bg-cyan-600 rounded-xl w-6 h-6 text-sm"
               @click="abrirModalDisp(sala.espacio)"
             >
               +
             </button>
             <button
+              title="Elminar sala"
               @click="borraSala(sala)"
               class="text-sm bg-red-500 hover:bg-red-400 rounded-xl w-6 h-6 mt-1 mb-0.5"
             >
@@ -110,19 +111,15 @@ import { onMounted, ref } from "vue";
 import MiItem from "../components/MiItem.vue";
 
 let salas = ref([]);
-
 let dispositivos = ref([]);
-
-const modalOn = ref(false);
-
 const nombreSensor = ref("");
 const tipoSensor = ref("");
-
 const route = useRoute();
 const router = useRouter();
 const nombreUsu = route.params.name;
 const nombreSala = ref("");
 const modalSensorOn = ref(false);
+const modalOn = ref(false);
 const salaActual = ref("");
 
 onMounted(() => {
@@ -162,14 +159,14 @@ function abrirModalDisp(sala) {
   salaActual.value = sala;
 }
 
-const registraDispositivo = async () => {
+const registraDispositivo = () => {
   if (nombreSensor.value == "") {
     alert("Debe elegir el nombre del dispositivo");
   } else if (tipoSensor.value == "") {
     alert("Debe elegir el tipo de dispositivo");
   } else {
     if (tipoSensor.value == "Sensor") {
-      await anadeDisp("DISPOSITIVOS", {
+      anadeDisp("DISPOSITIVOS", {
         nombre: nombreSensor.value,
         usuario: nombreUsu,
         tipo: tipoSensor.value,
@@ -179,7 +176,7 @@ const registraDispositivo = async () => {
       nombreSensor.value = "";
       tipoSensor.value = "";
     } else {
-      await anadeDisp("DISPOSITIVOS", {
+      anadeDisp("DISPOSITIVOS", {
         nombre: nombreSensor.value,
         usuario: nombreUsu,
         tipo: tipoSensor.value,
@@ -226,9 +223,9 @@ const borraSala = (sala) => {
   min-width: 100%;
   background: linear-gradient(
     180deg,
-    rgb(14 116 144) 0%,
-    rgb(7 89 133) 35%,
-    rgb(14 165 233) 100%
+    rgb(83, 80, 72) 0%,
+    rgb(83, 77, 62) 35%,
+    rgb(64, 56, 40) 100%
   );
   text-align: center;
   color: azure;

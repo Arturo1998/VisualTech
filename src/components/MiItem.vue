@@ -1,9 +1,13 @@
 <template>
-  <div @click="cambiarTemperatura(item.id)" class="nombreDisp">
+  <div
+    title="Más información"
+    @click="cambiarTemperatura(item.id)"
+    class="nombreDisp"
+  >
     {{ item.nombre }}
   </div>
   <div
-    class="text-center bg-cyan-800 h-auto pt-4 pb-4 font-extrabold border-2 mb-2 rounded-lg"
+    class="text-center bg-stone-600 h-auto pt-4 pb-4 font-extrabold border-2 mb-2 rounded-lg"
   >
     <p class="text-base text-white">Tipo: {{ item.tipo }}</p>
     <p v-if="item.tipo == 'Sensor'" class="text-base">
@@ -44,7 +48,7 @@ const cambiarTemperatura = (id) => {
 
 <style scoped>
 .nombreDisp {
-  background-color: rgb(90, 153, 195);
+  background-color: rgb(120, 115, 95);
   text-align: center;
   width: 50%;
   margin: 0 auto;
@@ -54,8 +58,8 @@ const cambiarTemperatura = (id) => {
 }
 
 .botonCambiar {
-  background-color: cadetblue;
-  border-radius: 50%;
+  background-color: rgb(133, 126, 104);
+  border-radius: 30px;
   width: 50%;
   margin-top: 10px;
 }
@@ -67,7 +71,7 @@ const cambiarTemperatura = (id) => {
   margin-top: 10px;
   background-color: rgb(212, 71, 45);
   width: 50%;
-  border-radius: 90%;
+  border-radius: 30px;
 }
 
 .botonEliminar:hover {

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="h-screen min-w-min flex flex-col bg-gradient-to-b from-cyan-700 via-sky-800 to-sky-500 text-center text-2xl text-white pt-6 items-center"
+    class="h-screen min-w-min flex flex-col bg-gradient-to-b from-stone-900 via-stone-700 to-stone-600 text-center text-2xl text-white pt-6 items-center"
   >
     <div class="flex flex-col w-56">
       <h1 class="p-2 font-black">CREA UNA CUENTA</h1>
@@ -16,7 +16,7 @@
         class="border-2 border-emerald-500 text-black"
         type="password"
       />
-      <button @click="registro()" class="bg-cyan-300 rounded-xl p-1 mt-4">
+      <button @click="registro()" class="bg-stone-500 rounded-xl p-1 mt-4">
         Sing In
       </button>
       <RouterLink to="/">¿Ya tienes cuenta?</RouterLink>
@@ -47,6 +47,6 @@ const registro = () => {
 
 <style scoped>
 button:hover {
-  background-color: cadetblue;
+  background-color: rgb(116, 110, 84);
 }
 </style>
