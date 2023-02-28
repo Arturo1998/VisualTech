@@ -42,7 +42,7 @@ const borrar = (item) => {
 };
 
 const cambiarTemperatura = (id) => {
-  window.open(`http://localhost:5174/${id}`);
+  window.open(`http://localhost:5174/visualTechCliente/${id}`);
 };
 </script>
 

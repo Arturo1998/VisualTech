@@ -29,9 +29,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 
-//Obtenemos los talleres de manera estática
-export const dameDocs = (ref) => getDocs(collection(db, ref));
-
 export const dameDocsFiltro = (ref, nombre, valorNombre) =>
   getDocs(query(collection(db, ref), where(nombre, "==", valorNombre)));
 
